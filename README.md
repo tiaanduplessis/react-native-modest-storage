@@ -41,6 +41,8 @@
 
 ## About
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/tiaanduplessis/react-native-modest-storage.svg)](https://greenkeeper.io/)
+
 This module is just a modest wrapper around [React Native](https://facebook.github.io/react-native/)'s [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage.html) API. It's purpose is to provide a cleaner API for persisting data.
 
 ## Install
