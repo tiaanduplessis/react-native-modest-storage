@@ -1,0 +1,34 @@
+{
+  "name": "react-native-modest-storage",
+  "version": "1.0.0",
+  "description": "A modest wrapper around the AsyncStorage API",
+  "license": "MIT",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiaanduplessis/react-native-modest-storage.git"
+  },
+  "homepage": "https://github.com/tiaanduplessis/react-native-modest-storage",
+  "bugs": "https://github.com/tiaanduplessis/react-native-modest-storage/issues",
+  "author": {
+    "name": "Tiaan",
+    "email": "tiaanduplessis@hotmail.com",
+    "url": "tiaanduplessis.co.za"
+  },
+  "scripts": {
+    "lint": "standard --verbose",
+    "lint:fix": "standard --fix --verbose",
+    "test": "npm run lint"
+  },
+  "keywords": [
+    "asyncstorage",
+    "wrapper",
+    "persist",
+    "react-native",
+    "react-native-modest-storage"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "standard": "^8.6.0"
+  }
+}
