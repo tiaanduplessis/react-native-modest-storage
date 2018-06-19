@@ -1,33 +1,32 @@
-/**
- *
- * @name react-native-modest-storage
- * @version 1.0.0
- * @author Tiaan du Plessis
- * @license MIT
- */
-
-'use strict'
-
 import { AsyncStorage } from 'react-native'
+import {parse, stringify} from '@tiaanduplessis/json'
+
+function useDefault (def, val) {
+  return (val === undefined || val === null) && def
+}
 
 /**
  * Retreive value from AsyncStorage based on key.
  * Wrapper around getItem & multiGet.
- * @param {String, Array} key to lookup
+ *
+ * @param {String, Array} key Key to lookup
+ * @param {Any} def Default value
+ *
  * @returns {Promise} value of key
+ *
+ * @example
+ * storage.get('foo').then(console.log).catch(console.error)
  */
-function get (key) {
-  // Determine if get or multiGet should be performed
+function get (key, def) {
   if (Array.isArray(key)) {
-    return AsyncStorage.multiGet(key).then((values) => {
-      return values.map((value) => {
-        // Index 0 contains keys, index 1 values
-        return JSON.parse(value[1])
-      })
-    })
-  } else {
-    return AsyncStorage.getItem(key).then(JSON.parse)
+    return AsyncStorage.multiGet(key)
+      .then((values) => values.map(([_, value]) => {
+        return useDefault(def, value) ? def : parse(value)
+      }))
+      .then(results => Promise.all(results))
   }
+
+  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : parse(value))
 }
 
 /**
@@ -39,10 +38,11 @@ function get (key) {
  */
 function set (key, value) {
   if (Array.isArray(key)) {
-    return AsyncStorage.multiSet(key)
-  } else {
-    return AsyncStorage.setItem(key, JSON.stringify(value))
+    const items = key.map(([key, value]) => [key, stringify(value)])
+    return AsyncStorage.multiSet(items)
   }
+
+  return AsyncStorage.setItem(key, stringify(value))
 }
 
 /**
@@ -54,12 +54,10 @@ function set (key, value) {
  */
 function update (key, value) {
   if (Array.isArray(key)) {
-    return AsyncStorage.multiMerge(key.map((pair) => {
-      return [pair[0], JSON.stringify(pair[1])]
-    }))
+    return AsyncStorage.multiMerge(key.map(([key, val]) => [key, stringify(val)]))
   }
 
-  return AsyncStorage.mergeItem(key, JSON.stringify(value))
+  return AsyncStorage.mergeItem(key, stringify(value))
 }
 
 /**
@@ -67,6 +65,9 @@ function update (key, value) {
  * Wrapper around removeItem & multiRemove.
  * @param {String, Array} key to remove
  * @returns {Promise}
+ *
+ * @example
+ * storage.remove(key).then(console.log).catch(console.error)
  */
 function remove (key) {
   if (Array.isArray(key)) {
