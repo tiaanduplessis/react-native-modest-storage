@@ -1,5 +1,4 @@
 import { AsyncStorage } from 'react-native'
-import {parse, stringify} from '@tiaanduplessis/json'
 
 function useDefault (def, val) {
   return (val === undefined || val === null) && def
@@ -21,12 +20,12 @@ function get (key, def) {
   if (Array.isArray(key)) {
     return AsyncStorage.multiGet(key)
       .then((values) => values.map(([_, value]) => {
-        return useDefault(def, value) ? def : parse(value)
+        return useDefault(def, value) ? def : JSON.parse(value)
       }))
       .then(results => Promise.all(results))
   }
 
-  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : parse(value))
+  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : JSON.parse(value))
 }
 
 /**
@@ -38,11 +37,11 @@ function get (key, def) {
  */
 function set (key, value) {
   if (Array.isArray(key)) {
-    const items = key.map(([key, value]) => [key, stringify(value)])
+    const items = key.map(([key, value]) => [key, JSON.stringify(value)])
     return AsyncStorage.multiSet(items)
   }
 
-  return AsyncStorage.setItem(key, stringify(value))
+  return AsyncStorage.setItem(key, JSON.stringify(value))
 }
 
 /**
@@ -54,10 +53,10 @@ function set (key, value) {
  */
 function update (key, value) {
   if (Array.isArray(key)) {
-    return AsyncStorage.multiMerge(key.map(([key, val]) => [key, stringify(val)]))
+    return AsyncStorage.multiMerge(key.map(([key, val]) => [key, JSON.stringify(val)]))
   }
 
-  return AsyncStorage.mergeItem(key, stringify(value))
+  return AsyncStorage.mergeItem(key, JSON.stringify(value))
 }
 
 /**
