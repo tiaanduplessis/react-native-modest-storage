@@ -1,6 +1,6 @@
 {
   "name": "react-native-modest-storage",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A modest wrapper around the AsyncStorage API",
   "license": "MIT",
   "main": "src/index.js",
