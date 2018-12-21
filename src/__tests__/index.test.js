@@ -10,6 +10,12 @@ test('should set and get item', async () => {
   expect(result).toEqual({ bar: 1 })
 })
 
+test('should not parse non JSON values', async () => {
+  await storage.set('foo', 'bar')
+  const result = await storage.get('foo')
+  expect(result).toBe('bar')
+})
+
 test('should set and get multiple items', async () => {
   await storage.set([['key1', { foo: 'bar' }], ['key2', 'baz'], ['test', { obj: 9 }]])
   const result = await storage.get(['key1', 'key2'])

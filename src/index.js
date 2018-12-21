@@ -4,6 +4,15 @@ function useDefault (def, val) {
   return (val === undefined || val === null) && def
 }
 
+function parse (str = '') {
+  try {
+    const json = JSON.parse(str)
+    return json
+  } catch (error) {
+    return str
+  }
+}
+
 /**
  * Retreive value from AsyncStorage based on key.
  * Wrapper around getItem & multiGet.
@@ -20,12 +29,12 @@ function get (key, def) {
   if (Array.isArray(key)) {
     return AsyncStorage.multiGet(key)
       .then((values) => values.map(([_, value]) => {
-        return useDefault(def, value) ? def : JSON.parse(value)
+        return useDefault(def, value) ? def : parse(value)
       }))
       .then(results => Promise.all(results))
   }
 
-  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : JSON.parse(value))
+  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : parse(value))
 }
 
 /**
