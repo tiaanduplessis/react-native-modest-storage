@@ -108,4 +108,4 @@ export default {
   update,
   remove,
   clear,
-  keys}
+  keys }
