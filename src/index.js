@@ -1,4 +1,10 @@
-import { AsyncStorage } from 'react-native'
+let AsyncStorage
+
+function ensureAsyncStorage () {
+  if (!AsyncStorage) {
+    AsyncStorage = require('react-native').AsyncStorage
+  }
+} 
 
 function useDefault (def, val) {
   return (val === undefined || val === null) && def
@@ -102,10 +108,29 @@ function keys () {
   return AsyncStorage.getAllKeys()
 }
 
+function setAsyncStorage (value) {
+  AsyncStorage = value
+}
+
+function withAsyncStorage (obj) {
+  return Object.keys(obj).reduce((wrapped, method) => {
+    wrapped[method] = (...args) => {
+      ensureAsyncStorage()
+      return obj[method](...args)
+    }
+
+    return wrapped
+  }, {})
+}
+
 export default {
-  get,
-  set,
-  update,
-  remove,
-  clear,
-  keys }
+  setAsyncStorage,
+  ...withAsyncStorage({
+    get,
+    set,
+    update,
+    remove,
+    clear,
+    keys
+  }),
+}
