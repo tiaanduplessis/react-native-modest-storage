@@ -25,21 +25,16 @@
     "react-native-modest-storage"
   ],
   "devDependencies": {
-    "babel-jest": "^23.6.0",
-    "babel-preset-react-native": "^4.0.1",
-    "documentation": "^9.1.0",
-    "jest": "^23.6.0",
-    "react-native": "^0.57.8",
+    "babel-jest": "^24.5.0",
+    "documentation": "^9.3.1",
+    "jest": "^24.5.0",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-native": "^0.59.2",
     "standard": "^12.0.1"
   },
   "jest": {
     "setupFiles": [
       "./jest/setup.js"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-native"
     ]
   },
   "standard": {

@@ -4,7 +4,7 @@ function ensureAsyncStorage () {
   if (!AsyncStorage) {
     AsyncStorage = require('react-native').AsyncStorage
   }
-} 
+}
 
 function useDefault (def, val) {
   return (val === undefined || val === null) && def
@@ -132,5 +132,5 @@ export default {
     remove,
     clear,
     keys
-  }),
+  })
 }
