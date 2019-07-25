@@ -30,7 +30,7 @@
     "jest": "24.5.0",
     "metro-react-native-babel-preset": "0.53.1",
     "react-native": "0.59.2",
-    "standard": "12.0.1"
+    "standard": "13.1.0"
   },
   "jest": {
     "setupFiles": [
