@@ -32,15 +32,13 @@ function parse (str = '') {
  * storage.get('foo').then(console.log).catch(console.error)
  */
 function get (key, def) {
-  if (Array.isArray(key)) {
-    return AsyncStorage.multiGet(key)
-      .then((values) => values.map(([_, value]) => {
-        return useDefault(def, value) ? def : parse(value)
-      }))
-      .then(results => Promise.all(results))
-  }
-
-  return AsyncStorage.getItem(key).then(value => useDefault(def, value) ? def : parse(value))
+  const isArray = Array.isArray(key)
+  return AsyncStorage.multiGet(isArray ? key : [key])
+    .then((values) => values.map(([_, value]) => {
+      return useDefault(def, value) ? def : parse(value)
+    }))
+    .then(results => Promise.all(results))
+    .then(results => isArray ? results : results[0])
 }
 
 /**
