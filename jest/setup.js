@@ -1,35 +1,42 @@
-jest.mock('react-native', () => {
-  let items = {}
+jest.mock('@react-native-async-storage/async-storage', () => {
+  let items = new Map()
 
   return {
-    AsyncStorage: {
+    __esModule: true,
+    default: {
       setItem: jest.fn((item, value) => {
-        items[item] = value
+        items.set(item, value)
         return Promise.resolve(value)
       }),
       multiSet: jest.fn((item, value) => {
         item.forEach(([key, value]) => {
-          items[key] = value
+          items.set(key, value)
         })
         return Promise.resolve(value)
       }),
       getItem: jest.fn((item, value) => {
-        return Promise.resolve(items[item])
+        return Promise.resolve(items.has(item) ? items.get(item) : null)
       }),
       multiGet: jest.fn((keys) => {
-        const result = keys.map(key => [key, items[key]])
+        const result = keys.map(key => [key, items.has(key) ? items.get(key) : null])
         return Promise.resolve(result)
       }),
       removeItem: jest.fn((item) => {
-        return Promise.resolve(delete items[item])
+        return Promise.resolve(items.delete(item))
       }),
+      multiRemove: jest.fn((keys) => {
+        keys.forEach(key => items.delete(key))
+        return Promise.resolve()
+      }),
+      mergeItem: jest.fn(() => Promise.resolve()),
+      multiMerge: jest.fn(() => Promise.resolve()),
       getAllKeys: jest.fn(() => {
-        return Promise.resolve(Object.keys(items))
+        return Promise.resolve(Array.from(items.keys()))
       }),
       clear: jest.fn(() => {
-        items = {}
+        items = new Map()
         return Promise.resolve()
       })
     }
   }
-})
+}, { virtual: true })
