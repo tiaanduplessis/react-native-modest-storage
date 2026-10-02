@@ -24,7 +24,11 @@
     "react-native",
     "react-native-modest-storage"
   ],
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1 || ^2.0.0"
+  },
   "devDependencies": {
+    "@react-native-async-storage/async-storage": "1.23.1",
     "babel-jest": "24.9.0",
     "documentation": "12.1.2",
     "jest": "24.9.0",

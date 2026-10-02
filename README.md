@@ -19,17 +19,37 @@
 
 ## About
 
-This module is just a modest wrapper around [React Native](https://facebook.github.io/react-native/)'s [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage.html) API. It's purpose is to provide a cleaner API for persisting data.
+This module is a modest wrapper around [React Native Async Storage](https://github.com/react-native-async-storage/async-storage). Its purpose is to provide a cleaner API for persisting data.
 
 ## Install
 
 This project uses [node](https://nodejs.org) and [npm](https://www.npmjs.com). 
 
 ```sh
-$ npm install react-native-modest-storage
+$ npm install react-native-modest-storage @react-native-async-storage/async-storage@^2
 $ # OR
-$ yarn add react-native-modest-storage
+$ yarn add react-native-modest-storage @react-native-async-storage/async-storage@^2
 ```
+
+Async Storage is a peer dependency and must be installed directly in your app so React Native can link its native module. Version 2.x requires React Native 0.65 or newer. For React Native 0.60–0.64, install `@react-native-async-storage/async-storage@^1.23.1` instead and follow that release's native installation instructions. This wrapper supports Async Storage 1.23.1+ within 1.x, and 2.x; 3.x changes the batch and merge APIs and is not supported.
+
+React Native 0.60+ uses autolinking. On iOS, run `pod install` from your app's `ios` directory, then rebuild the app. See the [Async Storage installation guide](https://react-native-async-storage.github.io/2.0/Installation/) for other platforms. Expo apps should use `npx expo install @react-native-async-storage/async-storage` to select an SDK-compatible version, and check that it satisfies this wrapper's peer dependency.
+
+### Upgrading from React Native's built-in AsyncStorage
+
+Install and link the scoped Async Storage package before upgrading this wrapper. The wrapper's methods and JSON serialization are unchanged. Follow the storage package's migration guidance for your React Native version and test access to existing data in your app before shipping.
+
+### Testing
+
+Mock the scoped package instead of `react-native`'s removed `AsyncStorage` export. In your Jest setup file, use the official 1.x/2.x mock:
+
+```js
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+```
+
+You can still inject an AsyncStorage-compatible implementation with `storage.setAsyncStorage(mockStorage)`. The native module is loaded lazily, so injecting a storage implementation before the first operation avoids loading it.
 
 ## Usage
 

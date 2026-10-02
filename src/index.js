@@ -2,7 +2,8 @@ let AsyncStorage
 
 function ensureAsyncStorage () {
   if (!AsyncStorage) {
-    AsyncStorage = require('react-native').AsyncStorage
+    const storage = require('@react-native-async-storage/async-storage')
+    AsyncStorage = storage.default || storage
   }
 }
 
